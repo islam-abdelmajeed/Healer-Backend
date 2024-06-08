@@ -1,5 +1,5 @@
-const express = require('express');
-const { registerPatient, registerDoctor, login } = require('../controllers/authController');
+import express from 'express';
+import { registerPatient, registerDoctor, login } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -7,4 +7,4 @@ router.post('/register/patient', registerPatient);
 router.post('/register/doctor', registerDoctor);
 router.post('/login', login);
 
-module.exports = router;
+export default router;

@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken');
-const Patient = require('../models/Patient');
-const Doctor = require('../models/Doctor');
-const jwtConfig = require('../config/jwt');
+import jwt from 'jsonwebtoken';
+import Patient from '../models/Patient.js';
+import Doctor from '../models/Doctor.js';
+import jwtConfig from '../config/jwt.js';
 
 const authMiddleware = (role) => async (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', '');
+  const token = req.header('Authorization')?.replace('Bearer ', '');
   if (!token) {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
@@ -31,4 +31,4 @@ const authMiddleware = (role) => async (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+export default authMiddleware;

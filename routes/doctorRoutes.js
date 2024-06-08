@@ -1,9 +1,9 @@
-const express = require('express');
-const authMiddleware = require('../middleware/authMiddleware');
-const { manageAppointments } = require('../controllers/bookingController');
+import express from 'express';
+import authMiddleware from '../middleware/authMiddleware.js';
+import { getDoctorAppointments } from '../controllers/bookingController.js';
 
 const router = express.Router();
 
-router.get('/appointments', authMiddleware('doctor'), manageAppointments);
+router.get('/appointments', authMiddleware('doctor'), getDoctorAppointments);
 
-module.exports = router;
+export default router;

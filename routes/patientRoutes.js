@@ -1,10 +1,10 @@
-const express = require('express');
-const authMiddleware = require('../middleware/authMiddleware');
-const { bookAppointment, getAppointments } = require('../controllers/bookingController');
+import express from 'express';
+import authMiddleware from '../middleware/authMiddleware.js';
+import { bookAppointment, getPatientAppointments } from '../controllers/bookingController.js';
 
 const router = express.Router();
 
 router.post('/book', authMiddleware('patient'), bookAppointment);
-router.get('/appointments', authMiddleware('patient'), getAppointments);
+router.get('/appointments', authMiddleware('patient'), getPatientAppointments);
 
-module.exports = router;
+export default router;

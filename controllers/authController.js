@@ -1,12 +1,9 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const Patient = require('../models/Patient');
-const Doctor = require('../models/Doctor');
-const jwtConfig = require('../config/jwt');
+import bcrypt from 'bcryptjs';
+import Patient from '../models/Patient.js';
+import Doctor from '../models/Doctor.js';
+import generateToken from '../utils/generateToken.js';
 
-const generateToken = require('../utils/generateToken');
-
-exports.registerPatient = async (req, res) => {
+export const registerPatient = async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
     const patient = new Patient({ name, email, password, phone });
@@ -18,7 +15,7 @@ exports.registerPatient = async (req, res) => {
   }
 };
 
-exports.registerDoctor = async (req, res) => {
+export const registerDoctor = async (req, res) => {
   try {
     const { name, email, password, specialty, phone, availableTimes } = req.body;
     const doctor = new Doctor({ name, email, password, specialty, phone, availableTimes });
@@ -30,7 +27,7 @@ exports.registerDoctor = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password, role } = req.body;
   try {
     const User = role === 'patient' ? Patient : Doctor;
@@ -44,3 +41,13 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+

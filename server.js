@@ -1,9 +1,11 @@
-const express = require('express');
-const connectDB = require('./config/db');
-const authRoutes = require('./routes/authRoutes');
-const doctorRoutes = require('./routes/doctorRoutes');
-const patientRoutes = require('./routes/patientRoutes');
-require('dotenv').config();
+import express from 'express';
+import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import doctorRoutes from './routes/doctorRoutes.js';
+import patientRoutes from './routes/patientRoutes.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 connectDB();
