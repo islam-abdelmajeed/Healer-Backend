@@ -24,6 +24,7 @@ const DoctorSchema = new mongoose.Schema({
   },
   licenseDocument: { type: String, default: null },
   insuranceDocument: { type: String, default: null },
+  isDocumentsAccepted: { type: Boolean, default: false }
 });
 
 DoctorSchema.pre('save', async function(next) {

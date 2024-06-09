@@ -53,13 +53,18 @@ export const login = async (req, res) => {
   try {
     const User = role === 'patient' ? Patient : Doctor;
     const user = await User.findOne({ email });
+
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Check if doctor has uploaded the necessary documents
-    if (role === 'doctor' && (!user.licenseDocument || !user.insuranceDocument)) {
-      return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in'});
+    if (role === 'doctor') {
+      if (!user.licenseDocument || !user.insuranceDocument) {
+        return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in' });
+      }
+      if (!user.isDocumentsAccepted) {
+        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.' });
+      }
     }
 
     const token = generateToken(user._id, role);
