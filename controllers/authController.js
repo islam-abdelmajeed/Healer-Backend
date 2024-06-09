@@ -6,11 +6,21 @@ import generateToken from '../utils/generateToken.js';
 
 export const registerPatient = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
-    const patient = new Patient({ name, email, password, phone });
+    const { name, email, password, phone, dateOfBirth, gender } = req.body;
+    
+    if (!name || !email || !password || !phone || !dateOfBirth || !gender) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const validGenders = ['Male', 'Female'];
+    if (!validGenders.includes(gender)) {
+      return res.status(400).json({ message: 'Invalid gender' });
+    }
+
+    const patient = new Patient({ name, email, password, phone, dateOfBirth, gender });
     await patient.save();
     const token = generateToken(patient._id, 'patient');
-    res.status(201).json({ token, patient });
+    res.status(201).json({ token, patient});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -39,7 +49,7 @@ export const login = async (req, res) => {
 
     // Check if doctor has uploaded the necessary documents
     if (role === 'doctor' && (!user.licenseDocument || !user.insuranceDocument)) {
-      return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in' });
+      return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in'});
     }
 
     const token = generateToken(user._id, role);
