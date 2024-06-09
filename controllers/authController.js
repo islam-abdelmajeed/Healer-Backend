@@ -10,7 +10,7 @@ export const registerPatient = async (req, res) => {
     const patient = new Patient({ name, email, password, phone });
     await patient.save();
     const token = generateToken(patient._id, 'patient');
-    res.status(201).json({ token });
+    res.status(201).json({ token, patient });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -22,7 +22,7 @@ export const registerDoctor = async (req, res) => {
     const doctor = new Doctor({ name, email, password, specialty, phone, availableTimes });
     await doctor.save();
     const token = generateToken(doctor._id, 'doctor');
-    res.status(201).json({ token });
+    res.status(201).json({ token, doctor});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -43,7 +43,7 @@ export const login = async (req, res) => {
     }
 
     const token = generateToken(user._id, role);
-    res.status(200).json({ token });
+    res.status(200).json({ token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
