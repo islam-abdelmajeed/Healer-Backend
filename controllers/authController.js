@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
@@ -35,19 +36,15 @@ export const login = async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
+
+    // Check if doctor has uploaded the necessary documents
+    if (role === 'doctor' && (!user.licenseDocument || !user.insuranceDocument)) {
+      return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in' });
+    }
+
     const token = generateToken(user._id, role);
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
-export const logout = async (req, res) => {
-  try {
-    res.clearCookie('token');
-    res.status(200).json({ message: 'Logout successful' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-

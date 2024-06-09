@@ -7,7 +7,9 @@ const DoctorSchema = new mongoose.Schema({
   password: { type: String, required: true },
   specialty: { type: String, required: true },
   phone: { type: String, required: true },
-  availableTimes: { type: [String], required: true }, // Array of available times
+  availableTimes: { type: [String], required: true },
+  licenseDocument: { type: String, default: null }, 
+  insuranceDocument: { type: String, default: null }, 
 });
 
 DoctorSchema.pre('save', async function(next) {

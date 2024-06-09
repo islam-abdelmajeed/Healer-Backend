@@ -3,6 +3,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import doctorRoutes from './routes/doctorRoutes.js';
 import patientRoutes from './routes/patientRoutes.js';
+import documentRoutes from './routes/documentRoutes.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/patient', patientRoutes);
+app.use('/api/documents', documentRoutes);
 
 const PORT = process.env.PORT || 5000;
 
