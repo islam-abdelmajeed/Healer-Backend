@@ -28,11 +28,21 @@ export const registerPatient = async (req, res) => {
 
 export const registerDoctor = async (req, res) => {
   try {
-    const { name, email, password, specialty, phone, availableTimes } = req.body;
-    const doctor = new Doctor({ name, email, password, specialty, phone, availableTimes });
+    const { name, email, password, specialty, phone, dateOfBirth, gender, availableTimes } = req.body;
+    
+    if (!name || !email || !password || !specialty || !phone || !dateOfBirth || !gender || !availableTimes) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const validGenders = ['Male', 'Female'];
+    if (!validGenders.includes(gender)) {
+      return res.status(400).json({ message: 'Invalid gender' });
+    }
+
+    const doctor = new Doctor({ name, email, password, specialty, phone, dateOfBirth, gender, availableTimes });
     await doctor.save();
     const token = generateToken(doctor._id, 'doctor');
-    res.status(201).json({ token, doctor});
+    res.status(201).json({ token, doctor });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
