@@ -15,6 +15,7 @@ connectDB();
 app.use(express.json());
 
 // Define routes
+app.use('/', express.Router().get('/', (req, res) => res.send('<h1>Hello World!</h1>')));
 app.use('/api/auth', authRoutes);
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/patient', patientRoutes);
