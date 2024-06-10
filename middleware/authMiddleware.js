@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
-import jwtConfig from '../config/jwt.js';
 
 const authMiddleware = (role) => async (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -10,7 +9,7 @@ const authMiddleware = (role) => async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, jwtConfig.secret);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
 
     if (role && role !== decoded.role) {
@@ -24,7 +23,7 @@ const authMiddleware = (role) => async (req, res, next) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    req.user = user;
+    req.user = { id: user._id, role: decoded.role };
     next();
   } catch (err) {
     res.status(401).json({ message: 'Token is not valid' });
