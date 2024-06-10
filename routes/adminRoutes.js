@@ -4,7 +4,6 @@ import { acceptDoctorDocuments, rejectDoctorDocuments } from '../controllers/adm
 const router = express.Router();
 
 router.post('/doctors/:doctorId/accept', acceptDoctorDocuments);
-
 router.post('/doctors/:doctorId/reject', rejectDoctorDocuments);
 
 export default router;

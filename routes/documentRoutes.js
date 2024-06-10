@@ -5,19 +5,17 @@ import { uploadDocuments } from '../controllers/documentController.js';
 
 const router = express.Router();
 
-// Multer setup for file storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Directory to save files
+    cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Unique file name
+    cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 
 const upload = multer({ storage });
 
-// Route for uploading license and insurance documents
 router.post('/upload', authMiddleware('doctor'), upload.fields([{ name: 'license' }, { name: 'insurance' }]), uploadDocuments);
 
 export default router;

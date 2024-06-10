@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
+import jwtConfig from '../config/jwt.js';
 
 const authMiddleware = (role) => async (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -9,8 +10,8 @@ const authMiddleware = (role) => async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    const decoded = jwt.verify(token, jwtConfig.secret);
+    req.user = { id: decoded.id, role: decoded.role };
 
     if (role && role !== decoded.role) {
       return res.status(403).json({ message: 'Access denied' });

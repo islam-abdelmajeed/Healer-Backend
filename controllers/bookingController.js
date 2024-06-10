@@ -4,7 +4,7 @@ export const bookAppointment = async (req, res) => {
   try {
     const { doctorId, date, time } = req.body;
     const appointment = new Appointment({
-      patient: req.user._id,
+      patient: req.user.id,
       doctor: doctorId,
       date,
       time,
@@ -19,7 +19,7 @@ export const bookAppointment = async (req, res) => {
 
 export const getPatientAppointments = async (req, res) => {
   try {
-    const appointments = await Appointment.find({ patient: req.user._id }).populate('doctor');
+    const appointments = await Appointment.find({ patient: req.user.id }).populate('doctor');
     res.status(200).json({ appointments });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -28,7 +28,7 @@ export const getPatientAppointments = async (req, res) => {
 
 export const getDoctorAppointments = async (req, res) => {
   try {
-    const appointments = await Appointment.find({ doctor: req.user._id }).populate('patient');
+    const appointments = await Appointment.find({ doctor: req.user.id }).populate('patient');
     res.status(200).json({ appointments });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -38,7 +38,7 @@ export const getDoctorAppointments = async (req, res) => {
 export const cancelAppointment = async (req, res) => {
   try {
     const appointment = await Appointment.findByIdAndDelete(req.params.id);
-    res.status(200).json({ appointment });
+    res.status(200).json({ message: 'Appointment canceled', appointment });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -62,5 +62,4 @@ export const getAllAppointments = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
-
+};

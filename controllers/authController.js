@@ -1,18 +1,17 @@
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
-import generateToken from '../utils/generateToken.js';
+import { generateToken } from '../utils/tokenUtils.js';
 
 export const registerPatient = async (req, res) => {
   try {
     const { name, email, password, phone, dateOfBirth, gender } = req.body;
-    
+
     if (!name || !email || !password || !phone || !dateOfBirth || !gender) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const validGenders = ['Male', 'Female'];
+    const validGenders = ['Male', 'Female', 'Other'];
     if (!validGenders.includes(gender)) {
       return res.status(400).json({ message: 'Invalid gender' });
     }
@@ -20,7 +19,7 @@ export const registerPatient = async (req, res) => {
     const patient = new Patient({ name, email, password, phone, dateOfBirth, gender });
     await patient.save();
     const token = generateToken(patient._id, 'patient');
-    res.status(201).json({ token, patient});
+    res.status(201).json({ token, patient });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -29,12 +28,12 @@ export const registerPatient = async (req, res) => {
 export const registerDoctor = async (req, res) => {
   try {
     const { name, email, password, specialty, phone, dateOfBirth, gender, availableTimes } = req.body;
-    
+
     if (!name || !email || !password || !specialty || !phone || !dateOfBirth || !gender || !availableTimes) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const validGenders = ['Male', 'Female'];
+    const validGenders = ['Male', 'Female', 'Other'];
     if (!validGenders.includes(gender)) {
       return res.status(400).json({ message: 'Invalid gender' });
     }
