@@ -9,6 +9,6 @@ router.put('/doctor', authMiddleware('doctor'), updateDoctorInfo);
 router.put('/password', authMiddleware(), updatePassword);
 
 router.post('/password/forgot', requestPasswordReset);
-router.post('/password/reset/:token', resetPassword);
+router.post('/password/reset/:code', resetPassword);
 
 export default router;

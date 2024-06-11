@@ -2,13 +2,14 @@ import Doctor from '../models/Doctor.js';
 
 export const uploadDocuments = async (req, res) => {
   try {
-    const { id } = req.user;
+    const { id } = req.user; // Assuming user ID is set in req.user by authMiddleware
     const doctor = await Doctor.findById(id);
 
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor not found' });
     }
 
+    // Save file paths to the doctor's document fields
     if (req.files.license) {
       doctor.licenseDocument = req.files.license[0].path;
     }

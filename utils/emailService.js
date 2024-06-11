@@ -11,12 +11,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendPasswordResetEmail = async (to, resetUrl) => {
+export const sendPasswordResetEmail = async (to, resetCode) => {
   const mailOptions = {
     to,
     from: process.env.EMAIL_USER,
-    subject: 'Password Reset',
-    text: `You requested a password reset. Please click the following link to reset your password:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`,
+    subject: 'Password Reset Code',
+    text: `You requested a password reset. Use the following code to reset your password:\n\n${resetCode}\n\nIf you did not request this, please ignore this email.`,
   };
 
   await transporter.sendMail(mailOptions);

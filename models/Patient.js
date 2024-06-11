@@ -1,20 +1,22 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-const PatientSchema = new mongoose.Schema({
+const patientSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phone: { type: String, required: true },
   dateOfBirth: { type: Date, required: true },
-  gender: { type: String, required: true, enum: ['Male', 'Female'] }
+  gender: { type: String, required: true },
+  resetPasswordCode: String,
+  resetPasswordExpires: Date,
 });
 
-PatientSchema.pre('save', async function(next) {
+patientSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
-const Patient = mongoose.model('Patient', PatientSchema);
-export default Patient;
+export default mongoose.model('Patient', patientSchema);

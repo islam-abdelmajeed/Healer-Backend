@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
 import { generateToken } from '../utils/tokenUtils.js';
@@ -53,7 +54,17 @@ export const login = async (req, res) => {
     const User = role === 'patient' ? Patient : Doctor;
     const user = await User.findOne({ email });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    console.log('Provided password:', password);
+    console.log('Stored hashed password:', user.password);
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Password match result:', isMatch);
+
+    if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 

@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
-import { generateResetToken, generateToken } from '../utils/tokenUtils.js';
 import { sendPasswordResetEmail } from '../utils/emailService.js';
+import { generateResetCode } from '../utils/codeUtils.js';
 
 export const updatePatientInfo = async (req, res) => {
   try {
@@ -93,15 +93,18 @@ export const requestPasswordReset = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const { resetToken, hashedToken } = generateResetToken();
-    user.resetPasswordToken = hashedToken;
+    // Generate a 6-digit reset code
+    const resetCode = generateResetCode();
+
+    // Store the reset code and expiration time in the database
+    user.resetPasswordCode = resetCode;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    const resetUrl = `${process.env.CLIENT_URL}/password/reset/${resetToken}`;
-    await sendPasswordResetEmail(user.email, resetUrl);
+    // Send the reset code via email
+    await sendPasswordResetEmail(user.email, resetCode);
 
-    res.status(200).json({ message: 'Password reset link sent' });
+    res.status(200).json({ message: 'Password reset code sent' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -109,23 +112,33 @@ export const requestPasswordReset = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { code } = req.params;
     const { newPassword } = req.body;
 
-    if (!token || !newPassword) {
-      return res.status(400).json({ message: 'Token and new password are required' });
+    if (!code || !newPassword) {
+      return res.status(400).json({ message: 'Code and new password are required' });
     }
 
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
-    const user = await Patient.findOne({ resetPasswordToken: hashedToken, resetPasswordExpires: { $gt: Date.now() } }) ||
-                 await Doctor.findOne({ resetPasswordToken: hashedToken, resetPasswordExpires: { $gt: Date.now() } });
+    const user = await Patient.findOne({
+      resetPasswordCode: code,
+      resetPasswordExpires: { $gt: Date.now() }
+    }) || await Doctor.findOne({
+      resetPasswordCode: code,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired token' });
+      return res.status(400).json({ message: 'Invalid or expired code' });
     }
 
-    user.password = await bcrypt.hash(newPassword, 10);
-    user.resetPasswordToken = undefined;
+    console.log('New password before hashing:', newPassword);
+
+    // Hash the new password before saving it
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    console.log('Hashed new password:', hashedPassword);
+
+    user.password = hashedPassword;
+    user.resetPasswordCode = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
 
@@ -134,4 +147,3 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
