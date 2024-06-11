@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
 import { generateResetToken, generateToken } from '../utils/tokenUtils.js';
@@ -133,3 +134,4 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
