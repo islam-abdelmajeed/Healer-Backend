@@ -8,13 +8,16 @@ const doctorSchema = new mongoose.Schema({
   specialty: { type: String, required: true },
   phone: { type: String, required: true },
   dateOfBirth: { type: Date, required: true },
-  gender: { type: String, required: true },
-  availableTimes: { type: [String], required: true },
+  gender: {type: String,  enum:["Male", "Female"], required: true },
+  availableTimes: { type: [String], default: []},
   licenseDocument: String,
   insuranceDocument: String,
   isDocumentsAccepted: { type: Boolean, default: false },
   resetPasswordCode: String,
   resetPasswordExpires: Date,
+  price: { type: Number, required: true },
+  clinicAvailability: { type: Boolean, default: true },
+  homeVisitAvailability: { type: Boolean, default: true } 
 });
 
 doctorSchema.pre('save', async function (next) {

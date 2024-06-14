@@ -11,7 +11,7 @@ const authMiddleware = (role) => async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, jwtConfig.secret);
-    req.user = { id: decoded.id, role: decoded.role };
+    req.user = { id: decoded.id, role: decoded.role }; // Set user ID and role from token
 
     if (role && role !== decoded.role) {
       return res.status(403).json({ message: 'Access denied' });

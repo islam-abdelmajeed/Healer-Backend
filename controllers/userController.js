@@ -29,7 +29,18 @@ export const updatePatientInfo = async (req, res) => {
 export const updateDoctorInfo = async (req, res) => {
   try {
     const { id } = req.user;
-    const { name, email, phone, dateOfBirth, gender, specialty, availableTimes } = req.body;
+    const {
+      name,
+      email,
+      phone,
+      dateOfBirth,
+      gender,
+      specialty,
+      availableTimes,
+      price,
+      clinicAvailability,
+      homeVisitAvailability
+    } = req.body;
 
     const timeFormatRegex = /^(0[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/;
     if (availableTimes && !availableTimes.every(time => timeFormatRegex.test(time))) {
@@ -38,7 +49,7 @@ export const updateDoctorInfo = async (req, res) => {
 
     const updatedDoctor = await Doctor.findByIdAndUpdate(
       id,
-      { name, email, phone, dateOfBirth, gender, specialty, availableTimes },
+      { name, email, phone, dateOfBirth, gender, specialty, availableTimes, price, clinicAvailability, homeVisitAvailability },
       { new: true, runValidators: true }
     );
 
@@ -51,6 +62,7 @@ export const updateDoctorInfo = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const updatePassword = async (req, res) => {
   try {
