@@ -6,9 +6,9 @@ import { generateToken } from '../utils/tokenUtils.js';
 
 export const registerPatient = async (req, res) => {
   try {
-    const { name, email, password, phone, dateOfBirth, gender } = req.body;
+    const { name, email, password, phone, dateOfBirth, gender, address } = req.body;
 
-    if (!name || !email || !password || !phone || !dateOfBirth || !gender) {
+    if (!name || !email || !password || !phone || !dateOfBirth || !gender || !address) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -17,7 +17,7 @@ export const registerPatient = async (req, res) => {
       return res.status(400).json({ message: 'Invalid gender' });
     }
 
-    const patient = new Patient({ name, email, password, phone, dateOfBirth, gender });
+    const patient = new Patient({ name, email, password, phone, dateOfBirth, gender, address });
     await patient.save();
     const token = generateToken(patient._id, 'patient');
     res.status(201).json({ token, patient });
@@ -36,13 +36,14 @@ export const registerDoctor = async (req, res) => {
       phone,
       dateOfBirth,
       gender,
+      address,
       availableTimes,
       price,
       clinicAvailability,
       homeVisitAvailability
     } = req.body;
 
-    if (!name || !email || !password || !specialty || !phone || !dateOfBirth || !gender || !availableTimes || price === undefined) {
+    if (!name || !email || !password || !specialty || !phone || !dateOfBirth || !gender || !address || !availableTimes || price === undefined) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -63,6 +64,7 @@ export const registerDoctor = async (req, res) => {
       phone,
       dateOfBirth,
       gender,
+      address,
       availableTimes,
       price,
       clinicAvailability,

@@ -9,6 +9,7 @@ const doctorSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   dateOfBirth: { type: Date, required: true },
   gender: {type: String,  enum:["Male", "Female"], required: true },
+  address: { type: String, required: true },
   availableTimes: { type: [String], default: []},
   licenseDocument: String,
   insuranceDocument: String,
