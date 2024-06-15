@@ -97,16 +97,17 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    const token = generateToken(user._id, role);
+
     if (role === 'doctor') {
       if (!user.licenseDocument || !user.insuranceDocument) {
-        return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in' });
+        return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in', token, user });
       }
       if (!user.isDocumentsAccepted) {
-        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.' });
+        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.', token, user  });
       }
     }
 
-    const token = generateToken(user._id, role);
     res.status(200).json({ token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
