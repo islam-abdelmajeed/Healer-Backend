@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
 import { sendPasswordResetEmail } from '../utils/emailService.js';
