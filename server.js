@@ -9,7 +9,8 @@ import doctorRoutes from './routes/doctorRoutes.js';
 import patientRoutes from './routes/patientRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
-import reportRoutes from './routes/reportRoutes.js'; 
+import reportRoutes from './routes/reportRoutes.js';
+import ratingRoutes from './routes/ratingRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -27,6 +28,7 @@ app.use('/api/patient', patientRoutes);
 app.use('/api/appointments', bookingRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/report', reportRoutes);
+app.use('/api/rating', ratingRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
