@@ -40,7 +40,13 @@ export const submitRating = async (req, res) => {
     });
     await newRating.save();
 
-    res.status(201).json({ message: 'Rating submitted successfully' });
+    // Recalculate the average rating for the ratee
+    const ratings = await Rating.find({ ratee: rateeId, rateeModel });
+    const averageRating = ratings.reduce((acc, curr) => acc + curr.rating, 0) / ratings.length;
+    rateeExists.rate = averageRating;
+    await rateeExists.save();
+
+    res.status(201).json({ message: 'Rating submitted successfully', rating: newRating });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

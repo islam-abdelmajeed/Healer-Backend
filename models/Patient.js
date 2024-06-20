@@ -11,6 +11,7 @@ const patientSchema = new mongoose.Schema({
   address: { type: String, required: true }, 
   resetPasswordCode: String,
   resetPasswordExpires: Date,
+  rate: { type: Number, default: 5 }
 });
 
 patientSchema.pre('save', async function (next) {

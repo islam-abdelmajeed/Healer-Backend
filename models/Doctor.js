@@ -18,7 +18,8 @@ const doctorSchema = new mongoose.Schema({
   resetPasswordExpires: Date,
   price: { type: Number, required: true },
   clinicAvailability: { type: Boolean, default: true },
-  homeVisitAvailability: { type: Boolean, default: true } 
+  homeVisitAvailability: { type: Boolean, default: true },
+  rate: { type: Number, default: 5 }
 });
 
 doctorSchema.pre('save', async function (next) {
