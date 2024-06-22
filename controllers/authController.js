@@ -92,6 +92,10 @@ export const login = async (req, res) => {
     console.log('Provided password:', password);
     console.log('Stored hashed password:', user.password);
 
+    if (role === 'patient' && user.isBlocked) {
+      return res.status(403).json({ message: 'Your account is blocked. Please contact support.' });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     console.log('Password match result:', isMatch);
 

@@ -11,7 +11,10 @@ const patientSchema = new mongoose.Schema({
   address: { type: String, required: true }, 
   resetPasswordCode: String,
   resetPasswordExpires: Date,
-  rate: { type: Number, default: 5 }
+  rate: { type: Number, default: 5 },
+  idNumber: { type: String },
+  photos: { type: [String] },
+  isBlocked: { type: Boolean, default: false }
 });
 
 patientSchema.pre('save', async function (next) {

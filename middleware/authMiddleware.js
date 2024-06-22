@@ -11,7 +11,7 @@ const authMiddleware = (role) => async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, jwtConfig.secret);
-    req.user = { id: decoded.id, role: decoded.role }; // Set user ID and role from token
+    req.user = { id: decoded.id, role: decoded.role }; 
 
     if (role && role !== decoded.role) {
       return res.status(403).json({ message: 'Access denied' });
@@ -22,6 +22,10 @@ const authMiddleware = (role) => async (req, res, next) => {
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (decoded.role === 'patient' && user.isBlocked) {
+      return res.status(403).json({ message: 'Your account is blocked. Please contact support.' });
     }
 
     req.user = { id: user._id, role: decoded.role };
