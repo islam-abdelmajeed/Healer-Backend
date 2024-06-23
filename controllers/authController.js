@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
+import Admin from '../models/Admin.js'; 
 import { generateToken } from '../utils/tokenUtils.js';
 
 export const registerPatient = async (req, res) => {
@@ -82,22 +83,28 @@ export const registerDoctor = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password, role } = req.body;
   try {
-    const User = role === 'patient' ? Patient : Doctor;
+    let User;
+    if (role === 'patient') {
+      User = Patient;
+    } else if (role === 'doctor') {
+      User = Doctor;
+    } else if (role === 'admin') {
+      User = Admin;
+    } else {
+      return res.status(400).json({ message: 'Invalid role' });
+    }
+
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    console.log('Provided password:', password);
-    console.log('Stored hashed password:', user.password);
-
-    if (role === 'patient' && user.isBlocked) {
+    if ((role === 'patient' || role === 'doctor') && user.isBlocked) {
       return res.status(403).json({ message: 'Your account is blocked. Please contact support.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log('Password match result:', isMatch);
 
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -110,7 +117,7 @@ export const login = async (req, res) => {
         return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in', token, user });
       }
       if (!user.isDocumentsAccepted) {
-        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.', token, user  });
+        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.', token, user });
       }
     }
 

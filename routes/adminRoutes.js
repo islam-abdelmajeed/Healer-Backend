@@ -1,9 +1,14 @@
 import express from 'express';
-import { acceptDoctorDocuments, rejectDoctorDocuments } from '../controllers/adminController.js';
+import {registerAdmin, acceptDoctorDocuments, rejectDoctorDocuments, getAllPatients,  getAllDoctors, blockUser, unblockUser } from '../controllers/adminController.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
-
-router.post('/doctors/:doctorId/accept', acceptDoctorDocuments);
-router.post('/doctors/:doctorId/reject', rejectDoctorDocuments);
+router.post('/register', registerAdmin); 
+router.post('/doctors/:doctorId/accept', authMiddleware('admin'), acceptDoctorDocuments);
+router.post('/doctors/:doctorId/reject', authMiddleware('admin'), rejectDoctorDocuments);
+router.get('/patients', authMiddleware('admin'), getAllPatients);
+router.get('/doctors', authMiddleware('admin'), getAllDoctors);
+router.put('/block/:userType/:userId', authMiddleware('admin'), blockUser);
+router.put('/unblock/:userType/:userId', authMiddleware('admin'), unblockUser);
 
 export default router;

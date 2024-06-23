@@ -19,7 +19,8 @@ const doctorSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   clinicAvailability: { type: Boolean, default: true },
   homeVisitAvailability: { type: Boolean, default: true },
-  rate: { type: Number, default: 5 }
+  rate: { type: Number, default: 5 },
+  isBlocked: { type: Boolean, default: false }
 });
 
 doctorSchema.pre('save', async function (next) {
