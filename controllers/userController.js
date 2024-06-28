@@ -143,13 +143,8 @@ export const resetPassword = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired code' });
     }
 
-    console.log('New password before hashing:', newPassword);
 
-    // Hash the new password before saving it
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    console.log('Hashed new password:', hashedPassword);
-
-    user.password = hashedPassword;
+    user.password = newPassword;
     user.resetPasswordCode = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
