@@ -94,7 +94,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid role' });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).lean();
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -104,7 +104,10 @@ export const login = async (req, res) => {
       return res.status(403).json({ message: 'Your account is blocked. Please contact support.' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch =  bcrypt.compareSync(password, user.password);
+    console.log("isMatch", isMatch);
+    console.log("user.password", user.password);
+    console.log("password", password);
 
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
