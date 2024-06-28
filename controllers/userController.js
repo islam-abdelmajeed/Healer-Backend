@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import Patient from '../models/Patient.js';
 import Doctor from '../models/Doctor.js';
+import Admin from '../models/Admin.js';
 import { sendPasswordResetEmail } from '../utils/emailService.js';
 import { generateResetCode } from '../utils/codeUtils.js';
 
@@ -154,6 +155,35 @@ export const resetPassword = async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: 'Password has been reset' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const { id, role } = req.user;
+
+    let user;
+    if (role === 'patient') {
+      user = await Patient.findById(id).select('-password');
+    } else if (role === 'doctor') {
+      user = await Doctor.findById(id).select('-password');
+    } else if (role === 'admin') {
+      user = await Admin.findById(id).select('-password');
+    } else {
+      return res.status(400).json({ message: 'Invalid role' });
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if ((role === 'patient' || role === 'doctor') && user.isBlocked) {
+      return res.status(403).json({ message: 'Your account is blocked. Please contact support.' });
+    }
+
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

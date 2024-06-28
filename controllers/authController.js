@@ -21,7 +21,7 @@ export const registerPatient = async (req, res) => {
     const patient = new Patient({ name, email, password, phone, dateOfBirth, gender, address });
     await patient.save();
     const token = generateToken(patient._id, 'patient');
-    res.status(201).json({ token, patient, role: 'patient' });
+    res.status(201).json({ token, "user":patient, role: 'patient' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -74,7 +74,7 @@ export const registerDoctor = async (req, res) => {
 
     await doctor.save();
     const token = generateToken(doctor._id, 'doctor');
-    res.status(201).json({ token, doctor, role: 'doctor' });
+    res.status(201).json({ token, "user":doctor, role: 'doctor' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -121,7 +121,7 @@ export const login = async (req, res) => {
       }
     }
 
-    res.status(200).json({ token, user, role });
+    res.status(200).json({ token, "user":user, role });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

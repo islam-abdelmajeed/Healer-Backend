@@ -4,5 +4,5 @@ dotenv.config();
 
 export default {
   secret: process.env.JWT_SECRET,
-  expiresIn: '14d',
+  expiresIn: '70d',
 };
