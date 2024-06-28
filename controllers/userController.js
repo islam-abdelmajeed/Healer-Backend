@@ -183,7 +183,7 @@ export const getUserProfile = async (req, res) => {
       return res.status(403).json({ message: 'Your account is blocked. Please contact support.' });
     }
 
-    res.status(200).json(user, role);
+    res.status(200).json({user, role});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
