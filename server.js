@@ -18,10 +18,13 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+    origin: "*",
+    credentials: true,
+    optionSuccessStatus: 200,
+  };
+  app.use(cors(corsOptions));
 
-// Or to allow only specific origin
-app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
