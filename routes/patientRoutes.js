@@ -8,8 +8,8 @@ import { updatePatientDocument } from '../controllers/patientController.js';
 const router = express.Router();
 
 router.post('/book', authMiddleware('patient'), bookAppointment);
-router.get('/appointments', authMiddleware('patient'), getPatientAppointments);
-router.get('/search/doctors', authMiddleware('patient'), searchAndFilterDoctors);
+router.get('/appointments', authMiddleware(), getPatientAppointments);
+router.get('/search/doctors', authMiddleware(), searchAndFilterDoctors);
 router.post('/update-document', authMiddleware('patient'), updatePatientDocument);
 
 export default router;

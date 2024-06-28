@@ -6,8 +6,8 @@ const router = express.Router();
 router.post('/register', registerAdmin); 
 router.post('/doctors/:doctorId/accept', authMiddleware('admin'), acceptDoctorDocuments);
 router.post('/doctors/:doctorId/reject', authMiddleware('admin'), rejectDoctorDocuments);
-router.get('/patients', authMiddleware('admin'), getAllPatients);
-router.get('/doctors', authMiddleware('admin'), getAllDoctors);
+router.get('/patients', authMiddleware(), getAllPatients);
+router.get('/doctors', authMiddleware(), getAllDoctors);
 router.put('/block/:userType/:userId', authMiddleware('admin'), blockUser);
 router.put('/unblock/:userType/:userId', authMiddleware('admin'), unblockUser);
 

@@ -4,6 +4,6 @@ import { getDoctorAppointments } from '../controllers/bookingController.js';
 
 const router = express.Router();
 
-router.get('/appointments', authMiddleware('doctor'), getDoctorAppointments);
+router.get('/appointments', authMiddleware(), getDoctorAppointments);
 
 export default router;
