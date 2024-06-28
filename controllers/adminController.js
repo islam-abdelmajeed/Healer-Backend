@@ -18,9 +18,8 @@ export const registerAdmin = async (req, res) => {
       return res.status(400).json({ message: 'Admin with this email already exists' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const admin = new Admin({ name, email, password: hashedPassword });
+    
+    const admin = new Admin({ name, email, password});
     await admin.save();
 
     const token = generateToken(admin._id, 'admin');
@@ -132,3 +131,16 @@ export const unblockUser = async (req, res) => {
   }
 };
 
+export const getPendingDoctorDocuments = async (req, res) => {
+  try {
+    const doctors = await Doctor.find({
+      licenseDocument: { $exists: true, $ne: null },
+      insuranceDocument: { $exists: true, $ne: null },
+      isDocumentsAccepted: false,
+    });
+
+    res.status(200).json(doctors);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

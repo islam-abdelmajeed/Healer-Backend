@@ -1,5 +1,5 @@
 import express from 'express';
-import {registerAdmin, acceptDoctorDocuments, rejectDoctorDocuments, getAllPatients,  getAllDoctors, blockUser, unblockUser } from '../controllers/adminController.js';
+import {getPendingDoctorDocuments , registerAdmin, acceptDoctorDocuments, rejectDoctorDocuments, getAllPatients,  getAllDoctors, blockUser, unblockUser } from '../controllers/adminController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -10,5 +10,7 @@ router.get('/patients', authMiddleware(), getAllPatients);
 router.get('/doctors', authMiddleware(), getAllDoctors);
 router.put('/block/:userType/:userId', authMiddleware('admin'), blockUser);
 router.put('/unblock/:userType/:userId', authMiddleware('admin'), unblockUser);
+router.get('/doctors/pending-documents',  getPendingDoctorDocuments); // New route
+
 
 export default router;
