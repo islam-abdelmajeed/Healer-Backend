@@ -114,10 +114,10 @@ export const login = async (req, res) => {
 
     if (role === 'doctor') {
       if (!user.licenseDocument || !user.insuranceDocument) {
-        return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in'  });
+        return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in', token, user });
       }
       if (!user.isDocumentsAccepted) {
-        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.'});
+        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.', token, user });
       }
     }
 
