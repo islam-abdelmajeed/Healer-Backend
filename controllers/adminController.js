@@ -24,7 +24,7 @@ export const registerAdmin = async (req, res) => {
     await admin.save();
 
     const token = generateToken(admin._id, 'admin');
-    res.status(201).json({ token, admin });
+    res.status(201).json({ token, admin, role: 'admin' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

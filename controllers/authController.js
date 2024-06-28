@@ -13,7 +13,7 @@ export const registerPatient = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const validGenders = ['Male', 'Female', 'Other'];
+    const validGenders = ['Male', 'Female'];
     if (!validGenders.includes(gender)) {
       return res.status(400).json({ message: 'Invalid gender' });
     }
@@ -21,7 +21,7 @@ export const registerPatient = async (req, res) => {
     const patient = new Patient({ name, email, password, phone, dateOfBirth, gender, address });
     await patient.save();
     const token = generateToken(patient._id, 'patient');
-    res.status(201).json({ token, patient });
+    res.status(201).json({ token, patient, role: 'patient' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -74,7 +74,7 @@ export const registerDoctor = async (req, res) => {
 
     await doctor.save();
     const token = generateToken(doctor._id, 'doctor');
-    res.status(201).json({ token, doctor });
+    res.status(201).json({ token, doctor, role: 'doctor' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -114,14 +114,14 @@ export const login = async (req, res) => {
 
     if (role === 'doctor') {
       if (!user.licenseDocument || !user.insuranceDocument) {
-        return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in', token, user });
+        return res.status(403).json({ message: 'Please upload your license and insurance documents before logging in'  });
       }
       if (!user.isDocumentsAccepted) {
-        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.', token, user });
+        return res.status(403).json({ message: 'Your documents have not been accepted yet. Please wait for admin approval.'});
       }
     }
 
-    res.status(200).json({ token, user });
+    res.status(200).json({ token, user, role });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
