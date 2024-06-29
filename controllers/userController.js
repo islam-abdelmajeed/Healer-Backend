@@ -8,11 +8,11 @@ import { generateResetCode } from '../utils/codeUtils.js';
 export const updatePatientInfo = async (req, res) => {
   try {
     const { id } = req.user;
-    const { name, email, phone, dateOfBirth, gender } = req.body;
+    const { name, email, phone, dateOfBirth, gender, address } = req.body;
 
     const updatedPatient = await Patient.findByIdAndUpdate(
       id,
-      { name, email, phone, dateOfBirth, gender },
+      { name, email, phone, dateOfBirth, gender, address },
       { new: true, runValidators: true }
     );
 
@@ -35,6 +35,7 @@ export const updateDoctorInfo = async (req, res) => {
       phone,
       dateOfBirth,
       gender,
+      address,
       specialty,
       availableTimes,
       price,
@@ -49,7 +50,7 @@ export const updateDoctorInfo = async (req, res) => {
 
     const updatedDoctor = await Doctor.findByIdAndUpdate(
       id,
-      { name, email, phone, dateOfBirth, gender, specialty, availableTimes, price, clinicAvailability, homeVisitAvailability },
+      { name, email, phone, dateOfBirth, address, gender, specialty, availableTimes, price, clinicAvailability, homeVisitAvailability },
       { new: true, runValidators: true }
     );
 
