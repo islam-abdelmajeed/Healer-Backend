@@ -25,7 +25,7 @@ export const bookAppointment = async (req, res) => {
       return res.status(400).json({ message: 'Time must be in the format "HH:MM AM/PM"' });
     }
 
-    if (!doctor.availableTimes.includes(time)) {
+    if (doctor.availableTimes.length > 0 && !doctor.availableTimes.includes(time)) {
       return res.status(400).json({ message: 'Doctor not available at the requested time' });
     }
 
@@ -70,12 +70,6 @@ export const updateAppointmentStatus = async (req, res) => {
     if (!appointment) {
       return res.status(404).json({ message: 'Appointment not found' });
     }
-
-    // Log appointment details
-    console.log('Appointment found:', appointment);
-    console.log('Appointment Patient ID:', appointment.patient.toString());
-    console.log('Appointment Doctor ID:', appointment.doctor.toString());
-    console.log('User ID attempting to update:', userId);
 
     // Convert userId to string if it's an ObjectId
     const userIdString = userId.toString();
