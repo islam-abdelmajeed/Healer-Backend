@@ -1,5 +1,5 @@
 import express from 'express';
-import {getPendingDoctorDocuments , registerAdmin, acceptDoctorDocuments, rejectDoctorDocuments, getAllPatients,  getAllDoctors, blockUser, unblockUser } from '../controllers/adminController.js';
+import {getPendingDoctorDocuments , registerAdmin, acceptDoctorDocuments, rejectDoctorDocuments, getAllPatients,  getAllDoctors, blockUser, unblockUser, getPatientsCount, getDoctorsCount, getUnacceptedDocsCount, getReportsCount } from '../controllers/adminController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
