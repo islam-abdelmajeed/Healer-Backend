@@ -144,3 +144,43 @@ export const getPendingDoctorDocuments = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Get patients count
+export const getPatientsCount = async (req, res) => {
+  try {
+    const count = await Patient.countDocuments();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get doctors count
+export const getDoctorsCount = async (req, res) => {
+  try {
+    const count = await Doctor.countDocuments();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get unaccepted document doctors count
+export const getUnacceptedDocsCount = async (req, res) => {
+  try {
+    const count = await Doctor.countDocuments({ isDocumentsAccepted: false });
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get reports count
+export const getReportsCount = async (req, res) => {
+  try {
+    const count = await Report.countDocuments();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
