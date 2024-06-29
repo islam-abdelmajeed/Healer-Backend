@@ -3,7 +3,7 @@ import Doctor from '../models/Doctor.js';
 import bcrypt from 'bcryptjs';
 import Admin from '../models/Admin.js';
 import { generateToken } from '../utils/tokenUtils.js';
-
+import Report from '../models/Report.js';
 export const registerAdmin = async (req, res) => {
   try {
     const { name, email, password } = req.body;
