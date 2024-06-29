@@ -19,13 +19,7 @@ export const searchAndFilterDoctors = async (req, res) => {
     }
 
     if (address) {
-      // Use regex to perform a case-insensitive search in nested address fields
-      query.$or = [
-        { 'address.street': { $regex: address, $options: 'i' } },
-        { 'address.city': { $regex: address, $options: 'i' } },
-        { 'address.state': { $regex: address, $options: 'i' } },
-        { 'address.zipCode': { $regex: address, $options: 'i' } }
-      ];
+      query.address = { $regex: address, $options: 'i' };  
     }
 
     if (priceMin || priceMax) {
